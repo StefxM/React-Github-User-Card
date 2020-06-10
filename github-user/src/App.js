@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from "axios";
 import './App.css';
 
+
+import Followers from './followers';
+import styled from "styled-components";
 /*
 ## STEP 1 - Fetch the User Data
 
@@ -11,24 +14,52 @@ import './App.css';
 */
 
 
-function App() {
+class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      user: []
+     
+    };
+  }
+ CardDeco = styled.div`
+    border: 2px purple dotted;
+
+`;
+  ImgSizing = styled.img`
+    height: 35%;
+    width: 35%;
+  `;
+
 //axios call
-axios.get('https://api.github.com/users/stefxm')
-  .then( response => {
-    console.log(response.data);   
+componentDidMount() {
+  axios
+  .get('https://api.github.com/users/stefxm')
+  .then(response => {
+    console.log(response.data);
+   this.setState({ user:response.data });
     })
+    .catch(err => console.log(err));
+}
 
+
+//followers
+
+
+render() {
   return (
-    <div className="App">
-      <header className="App-header">
-       <p>
-         Hiiii JAY AND AVERIEEEE
-          MOMMY LOVES YOUUUUUU
-
-       </p>
-      </header>
+  <div className="App">
+    <this.CardDeco>
+    <h1>{this.state.user.login}</h1>
+    <this.ImgSizing src={this.state.user.avatar_url} alt="git pics"/>
+    </this.CardDeco>
+    <div className="Followers">
+    <Followers followers={Followers}/>
     </div>
-  );
+  </div>
+  )
+  }
 }
 
 export default App;
