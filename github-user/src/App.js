@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import axios from "axios";
 import './App.css';
 
-
-import Followers from './followers';
 import styled from "styled-components";
 /*
 ## STEP 1 - Fetch the User Data
@@ -19,7 +17,8 @@ class App extends Component {
     super();
 
     this.state = {
-      user: []
+      user: [],
+      followers: {}
      
     };
   }
@@ -34,20 +33,34 @@ class App extends Component {
 
 //axios call
 componentDidMount() {
-  axios
-  .get('https://api.github.com/users/stefxm')
-  .then(response => {
-    console.log(response.data);
-   this.setState({ user:response.data });
-    })
-    .catch(err => console.log(err));
+
+    axios
+    .get('https://api.github.com/users/stefxm')
+    .then(response => {
+      console.log(response.data);
+     this.setState({ user:response.data });
+      })
+      .catch(err => console.log(err));
+
+  
+ 
+      axios
+      .get("https://api.github.com/users/stefxm/followers")
+      .then(response => {
+          console.log(response.data);
+          this.setState({ followers:response.data });
+      })
+      .catch(err => console.log(err));
+   
 }
+
 
 
 //followers
 
 
 render() {
+  console.log(this.state.followers);
   return (
   <div className="App">
     <this.CardDeco>
@@ -55,7 +68,9 @@ render() {
     <this.ImgSizing src={this.state.user.avatar_url} alt="git pics"/>
     </this.CardDeco>
     <div className="Followers">
-    <Followers followers={Followers}/>
+    <h2>Followers</h2>
+      {this.state.followers.login}
+      <img src={this.state.avatar_url} alt="followers pic"/>
     </div>
   </div>
   )
